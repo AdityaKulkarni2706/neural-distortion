@@ -3,8 +3,8 @@
 **A high-performance, zero-allocation neural inference engine for real-time analog-style audio distortion in JUCE plugins**  
 Nov 2025 – Dec 2025
 
-<img src="https://via.placeholder.com/800x400/1a1a2e/0f0f23?text=Neural+Distortion+Plugin+Screenshot" alt="Plugin UI Screenshot" width="800"/>
-
+<img src="file:///C:/NaiveFlatLayers/flat.png" alt="Plugin UI Screenshot" width="800"/>
+<img src="file:///C:/NaiveFlatLayers/naive.png" alt="Plugin UI Screenshot" width="800"/>
 > From 77% → 21% CPU usage at 240 000 inferences/sec — real-time safe on modest hardware
 
 ## Overview
