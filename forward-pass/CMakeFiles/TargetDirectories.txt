@@ -1,0 +1,3 @@
+/home/aditya/distortgen/forward-pass/CMakeFiles/forward-pass.dir
+/home/aditya/distortgen/forward-pass/CMakeFiles/edit_cache.dir
+/home/aditya/distortgen/forward-pass/CMakeFiles/rebuild_cache.dir
