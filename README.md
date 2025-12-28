@@ -53,3 +53,35 @@ for(int i=0; i < layerSize; ++i) {
     // Pointer chasing overhead (vector inside vector)
     output[i] += weights[i][j] * input[j]; 
 }
+```
+### 2. Flat Approach (Fast)
+
+Using raw pointers and flattened arrays ensures contiguous memory access (Spatial Locality).
+
+```
+// Good for Audio: Zero allocation, simple pointer arithmetic
+// input/output buffers are pre-allocated at initialization
+for(int i=0; i < layerSize; ++i) {
+    // Sequential access = Happy CPU Cache
+    const float* row = &weights[i * prevLayerSize]; 
+    z += row[j] * input[j]; 
+}
+// Custom clamped tanh approximation for speed
+output[i] = taylor_tanh_input_clamped(z);
+```
+### Workflow
+1) Training (Python): PyTorch model trains on raw audio samples (sine sweeps/guitar DI)
+2) Export: Python script extracts weights to a C++ header (Weights.h).
+3) Inference (C++): The plugin compiles the weights directly into the binary for instant load times.
+
+### Build Instructions
+```
+# Clone the repository
+git clone [https://github.com/AdityaKulkarni2706/neural-distortion.git](https://github.com/AdityaKulkarni2706/neural-distortion.git)
+
+# Build the Benchmark tool
+cd neural-distortion/src
+g++ -O3 -o benchmark benchmark.cpp
+./benchmark
+```
+
