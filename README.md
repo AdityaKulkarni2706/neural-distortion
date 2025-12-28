@@ -31,7 +31,7 @@ The core engineering challenge was eliminating the overhead of `std::vector` dyn
 ### Visual Profiling Analysis
 **1. Before: Naive Layer (Heavy Overhead)**
 *Visible bottleneck in `std::vector::operator[]` and heap allocation.*
-![Naive Graph](https://github.com/AdityaKulkarni2706/neural-distortion/blob/main/images/naiva.png)
+![Naive Graph](https://github.com/AdityaKulkarni2706/neural-distortion/blob/main/images/naive.png)
 
 **2. After: Flat Layer (Pure Math)**
 *Overhead eliminated. CPU time is spent almost entirely on DSP math.*
