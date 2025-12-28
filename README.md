@@ -38,9 +38,4 @@ Two main architectures were developed and profiled:
 - Custom clamped tanh approximation (`taylor_tanh_input_clamped`)
 - Minimal branching and almost no STL container overhead
 
-```text
-NaiveLayer:    77.6% CPU ─┬─ std::vector access & allocations (~20–21%)
-                           └─ Many small heap ops
 
-FlatLayer:     21.4% CPU ─┬─ Linear memory walk (~1.2%)
-                           └─ Fast math approx (~1.3%)
