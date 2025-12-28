@@ -5,7 +5,7 @@
 ![Language](https://img.shields.io/badge/language-C%2B%2B17%20%7C%20Python-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-## 📌 Overview
+## Overview
 This project implements a lightweight neural network inference engine in C++ designed to emulate analog distortion circuits (overdrive, fuzz) in real-time.
 
 Unlike standard deep learning deployments (ONNX/TensorFlow), this engine is built from scratch for **audio-safety**:
@@ -13,12 +13,12 @@ Unlike standard deep learning deployments (ONNX/TensorFlow), this engine is buil
 * **Low Latency:** Optimized flat-array memory layout for maximum cache locality.
 * **Dependency-Free:** Header-only inference (no heavy external libraries).
 
-### 🎛️ Audio Demo
+### Distortion(Clipping) Graph
 *Input (Clean Sine) vs Output (Neural Hard Clipping)* ![Distortion Plot](https://github.com/AdityaKulkarni2706/neural-distortion/blob/main/images/distortion_demo.png)
 
 ---
 
-## 🚀 Performance Optimization
+##  Performance Optimization
 The core engineering challenge was eliminating the overhead of `std::vector` dynamic allocations during the audio callback. Using **Valgrind** and **KCachegrind**, I profiled the instruction cost and optimized the forward pass.
 
 ### The Results
@@ -31,15 +31,15 @@ The core engineering challenge was eliminating the overhead of `std::vector` dyn
 ### Visual Profiling Analysis
 **1. Before: Naive Layer (Heavy Overhead)**
 *Visible bottleneck in `std::vector::operator[]` and heap allocation.*
-![Naive Graph](https://github.com/AdityaKulkarni2706/neural-distortion/blob/main/images/naive_graph.png)
+![Naive Graph](https://github.com/AdityaKulkarni2706/neural-distortion/blob/main/images/naiva.png)
 
 **2. After: Flat Layer (Pure Math)**
 *Overhead eliminated. CPU time is spent almost entirely on DSP math.*
-![Flat Graph](https://github.com/AdityaKulkarni2706/neural-distortion/blob/main/images/flat_graph.png)
+![Flat Graph](https://github.com/AdityaKulkarni2706/neural-distortion/blob/main/images/flat.png)
 
 ---
 
-## 🛠 Architecture & Code Comparison
+## Architecture & Code Comparison
 
 The optimization involved moving from pointer-chasing (vector of vectors) to cache-friendly pointer arithmetic.
 
