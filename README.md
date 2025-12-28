@@ -1,41 +1,55 @@
 # Real-Time Neural Audio Distortion Plugin
+**A zero-allocation, analog-style neural inference engine for JUCE audio plugins.**
 
-**A high-performance, zero-allocation neural inference engine for real-time analog-style audio distortion in JUCE plugins**  
-Nov 2025 – Dec 2025
+![Platform](https://img.shields.io/badge/platform-JUCE%20%7C%20Windows%20%7C%20Linux-lightgrey)
+![Language](https://img.shields.io/badge/language-C%2B%2B17%20%7C%20Python-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
 
-<img src="https://github.com/AdityaKulkarni2706/neural-distortion/blob/main/images/flat.png" alt="Plugin UI Screenshot" width="800"/>
-<img src="https://github.com/AdityaKulkarni2706/neural-distortion/blob/main/images/naive.png" alt="Plugin UI Screenshot" width="800"/>
-> From 77% → 21% CPU usage at 240 000 inferences/sec — real-time safe on modest hardware
+## 📌 Overview
+This project implements a lightweight neural network inference engine in C++ designed to emulate analog distortion circuits (overdrive, fuzz) in real-time.
 
-## Overview
+Unlike standard deep learning deployments (ONNX/TensorFlow), this engine is built from scratch for **audio-safety**:
+* **Zero-Allocation:** No `malloc`/`new` in the audio callback (prevents dropouts/glitches).
+* **Low Latency:** Optimized flat-array memory layout for maximum cache locality.
+* **Dependency-Free:** Header-only inference (no heavy external libraries).
 
-This project implements a **real-time capable neural network inference engine** specifically designed to emulate analog distortion circuits (overdrive, distortion, fuzz, etc.) inside a JUCE-based audio plugin.
+### 🎛️ Audio Demo
+*Input (Clean Sine) vs Output (Neural Hard Clipping)* ![Distortion Plot](images/distortion_demo.png)
 
-The core achievement is a **zero-allocation forward pass**, which eliminates the risk of audio dropouts caused by heap operations — a critical requirement for professional real-time audio processing.
+---
 
-Two main architectures were developed and profiled:
+## 🚀 Performance Optimization
+The core engineering challenge was eliminating the overhead of `std::vector` dynamic allocations during the audio callback. Using **Valgrind** and **KCachegrind**, I profiled the instruction cost and optimized the forward pass.
 
-- **NaiveLayer** — straightforward but allocation-heavy implementation  
-- **FlatLayer** — heavily optimized, allocation-free version with custom math and memory layout
+### The Results
+| Metric | Naive Implementation | Optimized (Flat) Implementation | Improvement |
+| :--- | :--- | :--- | :--- |
+| **CPU Load** | 77.63% | 21.38% | **3.6x Reduction** |
+| **Instructions** | ~2 Billion | ~1 Billion | **50% Reduction** |
+| **Allocation** | Heavy (`std::vector` resize) | **Zero** (Pre-allocated buffers) | **Real-Time Safe** |
 
-## Key Achievements
+### Visual Profiling Analysis
+**1. Before: Naive Layer (Heavy Overhead)**
+*Visible bottleneck in `std::vector::operator[]` and heap allocation.*
+![Naive Graph](images/naive_graph.png)
 
-- **3.5× latency / CPU reduction** — from **~77%** to **~21%** CPU load (measured with Valgrind + KCachegrind)
-- **Completely eliminated dynamic allocations** during the audio callback / inference loop
-- Inference remains real-time safe even at high sample rates and low buffer sizes
-- Clean, scalable architecture ready for integration into JUCE audio plugins (VST3 / AU / AAX / Standalone)
+**2. After: Flat Layer (Pure Math)**
+*Overhead eliminated. CPU time is spent almost entirely on DSP math.*
+![Flat Graph](images/flat_graph.png)
 
-### Before vs After Optimization (CPU Flame Graph Summary)
+---
 
-**Naive version** (77.63% CPU in main forward pass):
+## 🛠 Architecture & Code Comparison
 
-- Heavy usage of `std::vector` with default allocator → frequent heap allocations
-- Multiple nested `operator[]` and container operations eating cycles
+The optimization involved moving from pointer-chasing (vector of vectors) to cache-friendly pointer arithmetic.
 
-**Optimized Flat version** (21.38% CPU total):
+### 1. Naive Approach (Slow)
+Standard bounds checking and dynamic resizing kill performance in the audio thread.
+```cpp
+// Bad for Audio: Heap allocation inside the loop!
+std::vector<float> output(layerSize); 
 
-- Flat memory layout + pointer arithmetic
-- Custom clamped tanh approximation (`taylor_tanh_input_clamped`)
-- Minimal branching and almost no STL container overhead
-
-
+for(int i=0; i < layerSize; ++i) {
+    // Pointer chasing overhead (vector inside vector)
+    output[i] += weights[i][j] * input[j]; 
+}
