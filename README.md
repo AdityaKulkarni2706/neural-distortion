@@ -14,7 +14,7 @@ Unlike standard deep learning deployments (ONNX/TensorFlow), this engine is buil
 * **Dependency-Free:** Header-only inference (no heavy external libraries).
 
 ### 🎛️ Audio Demo
-*Input (Clean Sine) vs Output (Neural Hard Clipping)* ![Distortion Plot](images/distortion_demo.png)
+*Input (Clean Sine) vs Output (Neural Hard Clipping)* ![Distortion Plot](https://github.com/AdityaKulkarni2706/neural-distortion/blob/main/images/distortion_demo.png)
 
 ---
 
@@ -31,11 +31,11 @@ The core engineering challenge was eliminating the overhead of `std::vector` dyn
 ### Visual Profiling Analysis
 **1. Before: Naive Layer (Heavy Overhead)**
 *Visible bottleneck in `std::vector::operator[]` and heap allocation.*
-![Naive Graph](images/naive_graph.png)
+![Naive Graph](https://github.com/AdityaKulkarni2706/neural-distortion/blob/main/images/naive_graph.png)
 
 **2. After: Flat Layer (Pure Math)**
 *Overhead eliminated. CPU time is spent almost entirely on DSP math.*
-![Flat Graph](images/flat_graph.png)
+![Flat Graph](https://github.com/AdityaKulkarni2706/neural-distortion/blob/main/images/flat_graph.png)
 
 ---
 
