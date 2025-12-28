@@ -77,7 +77,7 @@ output[i] = taylor_tanh_input_clamped(z);
 ### Build Instructions
 ```
 # Clone the repository
-git clone [https://github.com/AdityaKulkarni2706/neural-distortion.git](https://github.com/AdityaKulkarni2706/neural-distortion.git)
+git clone https://github.com/AdityaKulkarni2706/neural-distortion.git
 
 # Build the Benchmark tool
 cd neural-distortion/src
