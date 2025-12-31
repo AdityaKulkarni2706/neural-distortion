@@ -1,9 +1,13 @@
 # Real-Time Neural Audio Distortion Plugin
 **A zero-allocation, analog-style neural inference engine for JUCE audio plugins.**
 
-![Platform](https://img.shields.io/badge/platform-JUCE%20%7C%20Windows%20%7C%20Linux-lightgrey)
-![Language](https://img.shields.io/badge/language-C%2B%2B17%20%7C%20Python-blue)
-![License](https://img.shields.io/badge/license-MIT-green)
+## 🎥 Demo
+
+[![Neural Distortion Demo](https://img.youtube.com/vi/wBRHrmhN0mg/maxresdefault.jpg)](https://youtu.be/wBRHrmhN0mg)
+
+*Click to watch: Real-time neural distortion processing with optimized CPU usage*
+
+---
 
 ## Overview
 This project implements a lightweight neural network inference engine in C++ designed to emulate analog distortion circuits (overdrive, fuzz) in real-time.
