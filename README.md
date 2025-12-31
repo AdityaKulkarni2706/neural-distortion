@@ -1,7 +1,7 @@
 # Real-Time Neural Audio Distortion Plugin
 **A zero-allocation, analog-style neural inference engine for JUCE audio plugins.**
 
-## 🎥 Demo
+## Demo
 
 [![Neural Distortion Demo](https://img.youtube.com/vi/wBRHrmhN0mg/maxresdefault.jpg)](https://youtu.be/wBRHrmhN0mg)
 
